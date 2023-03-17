@@ -47,6 +47,8 @@ bot.start((ctx) =>
   )
 );
 
+let prompt = "";
+
 bot.on("text", async (ctx) => {
   const input = ctx.message.text;
   const username = ctx.message.from?.username;
@@ -64,10 +66,14 @@ bot.on("text", async (ctx) => {
     isMentioned
   );
 
+  if (input.startsWith("prompt:")) {
+    prompt = input.replace("prompt:", "");
+    ctx.reply("Prompt set!");
+    return;
+  }
+
   if (isMentioned || isReplyToBotMessage) {
-    const response = await openaiRequest(
-      "отвечай как ватник и с матерком и юморком по-русски:\n\n" + input
-    );
+    const response = await openaiRequest(prompt + ":\n\n" + input);
     ctx.reply(response);
   }
 });
