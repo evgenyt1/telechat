@@ -66,8 +66,8 @@ bot.on("text", async (ctx) => {
     isMentioned
   );
 
-  if (input.startsWith("prompt:")) {
-    prompt = input.replace("prompt:", "");
+  if (input.startsWith("@emttelechatbot prompt:")) {
+    prompt = input.replace("@emttelechatbot prompt:", "");
     ctx.reply("Prompt set!");
     return;
   }
