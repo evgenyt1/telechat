@@ -6,6 +6,13 @@ const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "";
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY || "";
 const YOUR_USERNAME = process.env.YOUR_USERNAME || "";
 
+if (!TELEGRAM_BOT_TOKEN || !OPENAI_API_KEY || !YOUR_USERNAME) {
+  console.error(
+    "Error: Required environment variables are not set. Please check your .env file."
+  );
+  process.exit(1);
+}
+
 const bot = new Telegraf(TELEGRAM_BOT_TOKEN);
 
 const openaiRequest = async (input: string): Promise<string> => {
@@ -40,10 +47,10 @@ bot.start((ctx) =>
 
 bot.on("text", async (ctx) => {
   const input = ctx.message.text;
-  const username = ctx.message.from.username;
+  const username = ctx.message.from?.username;
   const isReply = ctx.message.reply_to_message;
   const isReplyToYourMessage =
-    isReply && ctx.message.reply_to_message.from.username === YOUR_USERNAME;
+    isReply && ctx.message.reply_to_message?.from?.username === YOUR_USERNAME;
 
   if (username === YOUR_USERNAME || isReplyToYourMessage) {
     const response = await openaiRequest(input);
