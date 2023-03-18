@@ -31,10 +31,20 @@ const openaiRequest = async (
   messages: ChatMessage[],
   chatId: number
 ): Promise<string> => {
+  const formattedMessages = messages
+    .map(
+      (message) =>
+        `${message.role === "user" ? message.username : "Assistant"}: ${
+          message.content
+        }`
+    )
+    .join("\n");
+  const fullInput = formattedMessages + "\n";
+
   try {
     const completion = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
-      messages: messages,
+      messages: [{ role: "user", content: fullInput }],
     });
     const generatedText = completion.data.choices[0].message?.content || "";
 
