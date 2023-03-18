@@ -36,7 +36,7 @@ const openaiRequest = async (promptText: string): Promise<string> => {
   try {
     const content = `There's a log of a Telegram chat in the form of [username]:message (including your messages noted as [ChatGPT]).
     Check if there are any messages addressed to you (any form, any language, e.g AI, bot, etc) and that were not replied by you.
-    If so, reply me with message, and mention the username of the person in you reply.
+    If so, reply me with one message (without [ChatGPT] prefix), and mention the username of the person in you reply.
     If not, just reply me with "skip". This is the log (usernames and their messages):
               
               \n\n${promptText}\n\n`;
@@ -47,7 +47,7 @@ const openaiRequest = async (promptText: string): Promise<string> => {
       model: "gpt-3.5-turbo",
       prompt: content,
       max_tokens: 1000,
-      temperature: 0,
+      temperature: 0.7,
     });
 
     console.log(completion.data.choices[0].text);
