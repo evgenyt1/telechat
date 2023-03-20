@@ -2,6 +2,16 @@ import "dotenv/config";
 import { Telegraf } from "telegraf";
 import { Configuration, OpenAIApi } from "openai";
 import fs from "fs/promises";
+import os from "os";
+
+const networkInterfaces = os.networkInterfaces();
+const defaultInterface = networkInterfaces[Object.keys(networkInterfaces)[0]];
+
+const defaultIpv4Address = defaultInterface?.find(
+  (iface) => iface.family === "IPv4"
+)?.address;
+
+console.log(defaultIpv4Address);
 
 console.log("ENV:", process.env);
 
