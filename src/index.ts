@@ -3,6 +3,8 @@ import { Telegraf } from "telegraf";
 import { Configuration, OpenAIApi } from "openai";
 import fs from "fs/promises";
 
+console.log("ENV:", process.env);
+
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "";
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY || "";
 const YOUR_USERNAME = process.env.YOUR_USERNAME || "";
@@ -99,4 +101,12 @@ bot.on("text", async (ctx) => {
   }
 });
 
+// if (process.env.PORT)
+//   bot.launch({
+//     webhook: {
+//       domain,
+//       port: Number(process.env.PORT),
+//     },
+//   });
+// else
 bot.launch();
