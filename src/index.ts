@@ -61,7 +61,7 @@ bot.start((ctx) =>
   )
 );
 
-let prompt = "";
+let prompt = process.env.DEFAULT_PROMPT || "";
 
 const loadPromptFromFile = async () => {
   try {
