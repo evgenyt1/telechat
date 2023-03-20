@@ -35,10 +35,10 @@ const telegramLog = `
 const openaiRequest = async (promptText: string): Promise<string> => {
   try {
     const content = `There's a log of a Telegram chat in the form of [username]:message (including your messages noted as [ChatGPT]).
-    Check if there are any messages addressed to you (any form, any language, e.g AI, bot, etc) and that were not replied by you.
-    If so, reply me with one message (without [ChatGPT] prefix), and mention the username of the person in you reply.
-    Mention in Telegram format like @username.
-    If not, just reply me with "skip" and analyze each line in log in Russian. This is the log (usernames and their messages):
+Check if there are any messages addressed to you (any form, any language, e.g AI, bot, etc) and that were not replied by you.
+If so, reply me with one message (without [ChatGPT] prefix), and mention the username of the person in you reply.
+Mention in Telegram format like @username.
+If not, just reply me with "skip" (nothing else, case sensitive). This is the log (usernames and their messages):
 
               
               \n\n${promptText}\n\n`;

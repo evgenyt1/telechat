@@ -1,7 +1,6 @@
 import "dotenv/config";
 import { Telegraf } from "telegraf";
 import { Configuration, OpenAIApi } from "openai";
-import fs from "fs/promises";
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "";
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY || "";
@@ -50,25 +49,6 @@ bot.start((ctx) =>
 
 let prompt = "";
 
-const loadPromptFromFile = async () => {
-  try {
-    const data = await fs.readFile("prompt.txt", "utf-8");
-    prompt = data;
-  } catch (error) {
-    console.error("Error loading prompt:", error);
-  }
-};
-
-const savePromptToFile = async (newPrompt: string) => {
-  try {
-    await fs.writeFile("prompt.txt", newPrompt, "utf-8");
-  } catch (error) {
-    console.error("Error saving prompt:", error);
-  }
-};
-
-loadPromptFromFile();
-
 bot.on("text", async (ctx) => {
   const input = ctx.message.text;
   const username = ctx.message.from?.username;
@@ -87,8 +67,7 @@ bot.on("text", async (ctx) => {
   );
 
   if (input.startsWith("prompt:")) {
-    prompt = input.replace("prompt:", "").trim();
-    savePromptToFile(prompt);
+    prompt = input.replace("prompt:", "");
     ctx.reply("Prompt set!");
     return;
   }
