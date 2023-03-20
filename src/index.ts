@@ -120,9 +120,11 @@ bot.on("text", async (ctx) => {
 // });
 
 if (process.env.PORT && process.env.HEROKU_DOMAIN) {
-  bot.createWebhook({ domain: "HEROKU_DOMAIN" }).then((webhookInfo) => {
-    createServer(webhookInfo).listen(process.env.PORT);
-  });
+  bot
+    .createWebhook({ domain: process.env.HEROKU_DOMAIN })
+    .then((webhookInfo) => {
+      createServer(webhookInfo).listen(process.env.PORT);
+    });
 } else bot.launch();
 
 process.once("SIGINT", () => bot.stop("SIGINT"));
