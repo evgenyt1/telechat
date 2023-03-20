@@ -9,7 +9,12 @@ const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "";
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY || "";
 const YOUR_USERNAME = process.env.YOUR_USERNAME || "";
 
-if (!TELEGRAM_BOT_TOKEN || !OPENAI_API_KEY || !YOUR_USERNAME) {
+if (
+  !TELEGRAM_BOT_TOKEN ||
+  !OPENAI_API_KEY ||
+  !YOUR_USERNAME ||
+  !process.env.HEROKU_URL
+) {
   console.error(
     "Error: Required environment variables are not set. Please check your .env file."
   );
@@ -101,12 +106,11 @@ bot.on("text", async (ctx) => {
   }
 });
 
-// if (process.env.PORT)
-//   bot.launch({
-//     webhook: {
-//       domain,
-//       port: Number(process.env.PORT),
-//     },
-//   });
-// else
-bot.launch();
+if (process.env.PORT)
+  bot.launch({
+    webhook: {
+      domain: process.env.HEROKU_URL!,
+      port: Number(process.env.PORT),
+    },
+  });
+else bot.launch();
