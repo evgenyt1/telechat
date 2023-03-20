@@ -2,16 +2,17 @@ import "dotenv/config";
 import { Telegraf } from "telegraf";
 import { Configuration, OpenAIApi } from "openai";
 import fs from "fs/promises";
-import os from "os";
+// import os from "os";
+import { createServer } from "http";
 
-const networkInterfaces = os.networkInterfaces();
-const defaultInterface = networkInterfaces[Object.keys(networkInterfaces)[0]];
+// const networkInterfaces = os.networkInterfaces();
+// const defaultInterface = networkInterfaces[Object.keys(networkInterfaces)[0]];
 
-const defaultIpv4Address = defaultInterface?.find(
-  (iface) => iface.family === "IPv4"
-)?.address;
+// const defaultIpv4Address = defaultInterface?.find(
+//   (iface) => iface.family === "IPv4"
+// )?.address;
 
-console.log(defaultIpv4Address);
+// console.log(defaultIpv4Address);
 
 console.log("ENV:", process.env);
 
@@ -19,12 +20,7 @@ const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "";
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY || "";
 const YOUR_USERNAME = process.env.YOUR_USERNAME || "";
 
-if (
-  !TELEGRAM_BOT_TOKEN ||
-  !OPENAI_API_KEY ||
-  !YOUR_USERNAME ||
-  !process.env.HEROKU_URL
-) {
+if (!TELEGRAM_BOT_TOKEN || !OPENAI_API_KEY || !YOUR_USERNAME) {
   console.error(
     "Error: Required environment variables are not set. Please check your .env file."
   );
@@ -116,11 +112,18 @@ bot.on("text", async (ctx) => {
   }
 });
 
-if (process.env.PORT)
-  bot.launch({
-    webhook: {
-      domain: process.env.HEROKU_URL!,
-      port: Number(process.env.PORT),
-    },
+// bot.launch({
+//   webhook: {
+//     domain: process.env.HEROKU_URL!,
+//     port: Number(process.env.PORT),
+//   },
+// });
+
+if (process.env.PORT && process.env.HEROKU_DOMAIN) {
+  bot.createWebhook({ domain: "HEROKU_DOMAIN" }).then((webhookInfo) => {
+    createServer(webhookInfo).listen(process.env.PORT);
   });
-else bot.launch();
+} else bot.launch();
+
+process.once("SIGINT", () => bot.stop("SIGINT"));
+process.once("SIGTERM", () => bot.stop("SIGTERM"));
